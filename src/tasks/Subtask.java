@@ -1,3 +1,5 @@
+package tasks;
+
 public class Subtask extends Task {
 
     private int epicId;
@@ -19,4 +21,5 @@ public class Subtask extends Task {
     public String toString() {
         return super.toString() + ",epicId:" + getEpicId();
     }
+
 }

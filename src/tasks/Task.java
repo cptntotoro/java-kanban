@@ -1,10 +1,10 @@
+package tasks;
 
 public class Task {
     private String name;
-
     private String description;
     private int id;
-    private Statuses status = Statuses.NEW;
+    private TaskStatus status = TaskStatus.NEW;
 
     public Task(String name, String description) {
         this.name = name;
@@ -35,11 +35,11 @@ public class Task {
         this.id = id;
     }
 
-    public Statuses getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Statuses status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -47,5 +47,6 @@ public class Task {
     public String toString() {
         return "ID:" + id + ",название:" + name + ",описание:" + description + ",статус:" + status;
     }
+
 }
 
