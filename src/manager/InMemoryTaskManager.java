@@ -11,9 +11,9 @@ import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
     private int idCounter = 1;
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
@@ -39,12 +39,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
-        tasks = new HashMap<>();
+        tasks.clear();
     }
 
     @Override
     public void deleteAllSubtasks() {
-        subtasks = new HashMap<>();
+        subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.setSubtasksIds(new ArrayList<>());
         }
@@ -52,8 +52,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
-        epics = new HashMap<>();
-        subtasks = new HashMap<>();
+        epics.clear();
+        subtasks.clear();
     }
 
     @Override

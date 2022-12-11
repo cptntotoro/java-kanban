@@ -14,7 +14,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void addTask(Task task) {
 
-        if (viewedTasks.size() == counter) {
+        if (viewedTasks.size() < MAX_COUNTER) {
             viewedTasks.add(counter, task);
         } else {
             viewedTasks.set(counter, task);
