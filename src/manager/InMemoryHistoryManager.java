@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private int counter = 0;
     private static final int MAX_COUNTER = 10;
 
     private List<Task> viewedTasks = new LinkedList<>();
