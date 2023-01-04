@@ -61,20 +61,22 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node node) {
-        if (node.prev == null) { // head
-            head = node.next;
-            node.next.prev = null;
-        } else if (node.next == null) { // tail
-            tail = node.prev;
-            node.prev.next = null;
+        Node prevNode = node.prev;
+        Node nextNode = node.next;
+        if (prevNode != null) {
+            prevNode.next = nextNode;
         } else {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
+            head = nextNode;
+        }
+        if (nextNode != null) {
+            nextNode.prev = prevNode;
+        } else {
+            tail = prevNode;
         }
     }
 
     @Override
-    public void remove(int id) { // Добавьте его вызов при удалении задач, чтобы они также удалялись из истории просмотров.
+    public void remove(int id) {
         Node node = nodeMap.remove(id);
         if (node != null) {
             removeNode(node);
