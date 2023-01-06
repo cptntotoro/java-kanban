@@ -77,6 +77,8 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
+        // Дмитрий, не поняла ваш комментарий к работе.
+        // Ниже я удаляю ноду из nodeMap, а затем удаляю саму ноду из связного списка
         Node node = nodeMap.remove(id);
         if (node != null) {
             removeNode(node);
