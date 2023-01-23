@@ -1,6 +1,10 @@
 package tasks;
 
+import tasks.enums.TaskStatus;
+import tasks.enums.TaskType;
+
 public class Task {
+    private final TaskType type = TaskType.TASK;
     private String name;
     private String description;
     private int id;
@@ -8,6 +12,13 @@ public class Task {
 
     public Task(String name, String description) {
         this.name = name;
+        this.description = description;
+    }
+
+    public Task(int id, String name, TaskStatus status, String description) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
         this.description = description;
     }
 
@@ -41,6 +52,10 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     @Override

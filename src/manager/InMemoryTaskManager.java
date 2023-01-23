@@ -1,7 +1,7 @@
 package manager;
 
 import tasks.Epic;
-import tasks.TaskStatus;
+import tasks.enums.TaskStatus;
 import tasks.Subtask;
 import tasks.Task;
 
@@ -12,12 +12,15 @@ import java.util.Set;
 
 public class InMemoryTaskManager implements TaskManager {
 
+    protected final HistoryManager historyManager = Managers.getHistoryManager();
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private int idCounter = 1;
 
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected void setIdCounter(int idCounter) {
+        this.idCounter = idCounter;
+    }
 
     private int generateNewId() {
         return idCounter++;
@@ -123,8 +126,8 @@ public class InMemoryTaskManager implements TaskManager {
         return epic.getId();
     }
 
-   @Override
-   public void updateTask(Task task) {
+    @Override
+    public void updateTask(Task task) {
         tasks.replace(task.getId(), task);
     }
 
@@ -204,6 +207,5 @@ public class InMemoryTaskManager implements TaskManager {
             epics.get(id).setStatus(status);
         }
     }
-
 }
 
