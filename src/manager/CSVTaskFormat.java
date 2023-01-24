@@ -9,13 +9,16 @@ import tasks.enums.TaskType;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Выбор имени и наполнения класса был предложен ментором группы Алексеем Монаховым
+* на вебинаре, на котором он разбирал данное задание. Так как программа генерирует
+* и читает файл формата csv, в этом классе хранятся методы для пробразования строк в объекты и обратно */
 public class CSVTaskFormat {
 
     public static Task taskFromString(String str) {
 
         final String[] strItems = str.split(",");
         final int id = Integer.parseInt(strItems[0]);
-        final TaskType type = TaskType.valueOf(strItems[1]); // опираться на тип, чтобы понимать, надо ли парсить след. строчки
+        final TaskType type = TaskType.valueOf(strItems[1]);
         final String name = strItems[2];
         final TaskStatus taskStatus = TaskStatus.valueOf(strItems[3]);
         final String description = strItems[4];
@@ -27,12 +30,12 @@ public class CSVTaskFormat {
             case SUBTASK:
                 final int epicId = Integer.parseInt(strItems[5]);
                 return new Subtask(id, name, taskStatus, description, epicId);
+            default:
+                throw new TaskFormatException("Недопустимый тип задачи");
         }
-        return null;
     }
 
     public static List<Integer> historyFromString(String str) {
-        // TODO: Восстановить список id для истории
         List<Integer> historyIds = new ArrayList<>();
         final String[] strItems = str.split(",");
         for (String strItem : strItems) {

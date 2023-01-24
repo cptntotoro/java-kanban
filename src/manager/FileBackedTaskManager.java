@@ -11,17 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileBackedTasksManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    public FileBackedTasksManager(File file) {
+    private FileBackedTaskManager(File file) {
         this.file = file;
     }
 
+    // Добавление метода main с тестами в этот класс требуется по заданию
     public static void main(String[] args) {
 
-        TaskManager taskManager = Managers.getDefaultHistory();
+        TaskManager taskManager = new FileBackedTaskManager(new File("resources/task.csv"));;
 
         int taskId1 = taskManager.createTask(new Task("Task1", "Description1"));
         int taskId2 = taskManager.createTask(new Task("Task2", "Description2"));
@@ -44,7 +45,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.deleteTaskById(taskId1);
         taskManager.deleteEpicById(epicId2);
 
-        TaskManager taskManager2 = FileBackedTasksManager.loadFromFile(((FileBackedTasksManager) taskManager).getFile());
+        TaskManager taskManager2 = FileBackedTaskManager.loadFromFile(((FileBackedTaskManager) taskManager).getFile());
 
 
         System.out.println("Таски менеджера 1");
@@ -111,8 +112,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println(taskManager.getHistory().toString().equals(taskManager2.getHistory().toString()));
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) {
-        final FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
+    public static FileBackedTaskManager loadFromFile(File file) {
+        final FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
         List<String> fileContent;
         try {
             fileContent = Files.readAllLines(Path.of(file.getPath()));
@@ -156,9 +157,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private void save() throws ManagerSaveException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
-            writeAllTypesOfTasks(writer, super.getAllTasks());
-            writeAllTypesOfTasks(writer, super.getAllEpics());
-            writeAllTypesOfTasks(writer, super.getAllSubtasks());
+            writeAllTypesOfTasks(writer, getAllTasks());
+            writeAllTypesOfTasks(writer, getAllEpics());
+            writeAllTypesOfTasks(writer, getAllSubtasks());
             writer.newLine();
             writer.write(CSVTaskFormat.toString(super.getHistory()));
         } catch (IOException exception) {
