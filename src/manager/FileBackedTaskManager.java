@@ -15,114 +15,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    private FileBackedTaskManager(File file) {
+    public FileBackedTaskManager(File file) {
         this.file = file;
     }
 
-    // Добавление метода main с тестами в этот класс требуется по заданию
-    public static void main(String[] args) {
-
-        TaskManager taskManager = new FileBackedTaskManager(new File("resources/task.csv"));;
-
-        int taskId1 = taskManager.createTask(new Task("Task1", "Description1"));
-        int taskId2 = taskManager.createTask(new Task("Task2", "Description2"));
-        int epicId1 = taskManager.createEpic(new Epic("Epic1", "Description1"));
-        int subtaskId1 = taskManager.createSubtask(new Subtask("Subtask1", "Subtask1", epicId1));
-        int subtaskId2 = taskManager.createSubtask(new Subtask("Subtask2", "Subtask2", epicId1));
-        int subtaskId3 = taskManager.createSubtask(new Subtask("Subtask3", "Subtask3", epicId1));
-        int epicId2 = taskManager.createEpic(new Epic("Epic2", "Description2"));
-
-        taskManager.getTaskById(taskId1);
-        taskManager.getTaskById(taskId2);
-        taskManager.getEpicById(epicId1);
-        taskManager.getSubtaskById(subtaskId1);
-        taskManager.getSubtaskById(subtaskId2);
-        taskManager.getSubtaskById(subtaskId3);
-        taskManager.getEpicById(epicId2);
-        taskManager.getTaskById(taskId2);
-        taskManager.getSubtaskById(subtaskId1);
-
-        taskManager.deleteTaskById(taskId1);
-        taskManager.deleteEpicById(epicId2);
-
-        TaskManager taskManager2 = FileBackedTaskManager.loadFromFile(((FileBackedTaskManager) taskManager).getFile());
-
-
-        System.out.println("Таски менеджера 1");
-        System.out.println(taskManager.getAllTasks());
-
-        System.out.println();
-        System.out.println();
-
-        System.out.println("Таски менеджера 2");
-        System.out.println(taskManager2.getAllTasks());
-
-
-        System.out.println();
-        System.out.println("---");
-        System.out.println();
-
-
-        System.out.println("Сабтаски менеджера 1");
-        System.out.println(taskManager.getAllSubtasks());
-
-        System.out.println();
-        System.out.println();
-
-        System.out.println("Сабтаски менеджера 2");
-        System.out.println(taskManager2.getAllSubtasks());
-
-
-        System.out.println();
-        System.out.println("---");
-        System.out.println();
-
-
-        System.out.println("Эпики менеджера 1");
-        System.out.println(taskManager.getAllEpics());
-
-        System.out.println();
-        System.out.println();
-
-        System.out.println("Эпики менеджера 2");
-        System.out.println(taskManager2.getAllEpics());
-
-
-        System.out.println();
-        System.out.println("---");
-        System.out.println();
-
-
-        System.out.println("История менеджера 1");
-        System.out.println(taskManager.getHistory());
-
-        System.out.println();
-        System.out.println();
-
-        System.out.println("История менеджера 2");
-        System.out.println(taskManager2.getHistory());
-
-
-        System.out.println();
-        System.out.println("---");
-        System.out.println();
-
-
-        System.out.println("Тест: сравнение историй менеджеров");
-        System.out.println(taskManager.getHistory().toString().equals(taskManager2.getHistory().toString()));
-    }
-
-    public static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerReadException {
         final FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
         List<String> fileContent;
         try {
             fileContent = Files.readAllLines(Path.of(file.getPath()));
         } catch (IOException e) {
-            throw new ManagerReadException("Ошибка чтения файла", e);
+            throw new ManagerReadException("File reading error.", e);
         }
+
+        if(fileContent.size() < 3) {
+            return taskManager;
+        }
+
         Map<Integer, Task> allTypesOfTasks = new HashMap<>();
         int maxId = 1;
-        for (int i = 1; i < fileContent.size() - 2; i++) {
+        for (int i = 1; i < fileContent.size(); i++) {
+            if (fileContent.get(i).isEmpty()) {
+                break;
+            }
             Task task = CSVTaskFormat.taskFromString(fileContent.get(i));
             allTypesOfTasks.put(task.getId(), task);
             taskManager.setIdCounter(task.getId());
@@ -154,7 +69,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return file;
     }
 
-    private void save() throws ManagerSaveException {
+    public void save() throws ManagerSaveException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");
             writeAllTypesOfTasks(writer, getAllTasks());
@@ -163,7 +78,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.newLine();
             writer.write(CSVTaskFormat.toString(super.getHistory()));
         } catch (IOException exception) {
-            throw new ManagerSaveException("Ошибка записи", exception);
+            throw new ManagerSaveException("File save error.", exception);
         }
     }
 
@@ -171,6 +86,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         for (T task : allTypesOfTasks) {
             writer.write(CSVTaskFormat.toString(task) + "\n");
         }
+    }
+
+    @Override
+    public Integer createTask(Task task) {
+        Integer id = super.createTask(task);
+        save();
+        return id;
+    }
+
+    @Override
+    public Integer createSubtask(Subtask subtask) {
+        Integer id = super.createSubtask(subtask);
+        save();
+        return id;
+    }
+
+    @Override
+    public Integer createEpic(Epic epic) {
+        Integer id = super.createEpic(epic);
+        save();
+        return id;
     }
 
     @Override
