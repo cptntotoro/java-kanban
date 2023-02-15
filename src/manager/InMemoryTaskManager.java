@@ -155,17 +155,9 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime startTimeComp = prioritizedTask.getStartTime();
             LocalDateTime endTimeComp = prioritizedTask.getEndTime();
 
-//            Первое условие проверяет, что голова временного отрезка зацепила существующий временной отрезок
-//            Второе условие проверяет, что хвост временного отрезка зацепил существующий временной отрезок
-//            Третье условие проверяет, что временной отрезок оборачивает существующий временной отрезок
-//            А если мы будем проверять только условие "startTime isAfter startTimeComp && endTime isBefore endTimeComp",
-//            то будем отлавливать только частный случай, когда и голова, и хвост временного отрезка оказались в существующем временном отрезке
-            if(startTime != null && startTimeComp != null) {
-                if ((startTime.isAfter(startTimeComp) && startTime.isBefore(endTimeComp)) ||
-                        (endTime.isAfter(startTimeComp) && endTime.isBefore(endTimeComp)) ||
-                        (startTime.isBefore(startTimeComp) && endTime.isAfter(endTimeComp))) {
-                    return true;
-                }
+            if(startTime != null && startTimeComp != null && task.getId() != prioritizedTask.getId() &&
+                    startTime.isBefore(endTimeComp) && endTime.isAfter(startTimeComp)) {
+                return true;
             }
         }
         return false;

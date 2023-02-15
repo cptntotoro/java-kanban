@@ -169,7 +169,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void createSubtask() {
         initializeTasks();
 
-        Subtask subtask = new Subtask("Subtask name", "Subtask description", epic1Id, LocalDateTime.of(2000, 6, 1, 1, 1), 60);
+        Subtask subtask = new Subtask("Subtask name", "Subtask description", epic1Id, LocalDateTime.of(2000, 9, 1, 1, 1), 60);
         Integer subtaskId = taskManager.createSubtask(subtask);
         Subtask subtaskReceived = taskManager.getSubtaskById(subtaskId);
         assertNotNull(subtaskReceived, "Subtask was not found.");
