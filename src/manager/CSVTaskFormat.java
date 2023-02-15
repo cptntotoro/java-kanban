@@ -20,7 +20,7 @@ public class CSVTaskFormat {
         final String name = strItems[2];
         final TaskStatus taskStatus = TaskStatus.valueOf(strItems[3]);
         final String description = strItems[4];
-        final LocalDateTime startTime = !strItems[5].equals("null") ? LocalDateTime.parse(strItems[5]) : null;
+        final LocalDateTime startTime = !strItems[5].isEmpty() ? LocalDateTime.parse(strItems[5]) : null;
         final long duration = Long.parseLong(strItems[6]);
         switch (type) {
             case TASK:
@@ -49,7 +49,7 @@ public class CSVTaskFormat {
 
     public static String toString(Task task) {
         String str = task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + "," + (task.getStartTime() != null ? task.getStartTime().toString() : "null") + "," + task.getDuration();
+                task.getDescription() + "," + (task.getStartTime() != null ? task.getStartTime().toString() : "") + "," + task.getDuration();
         if(task instanceof Subtask) {
             str = str + "," + ((Subtask)task).getEpicId();
         }

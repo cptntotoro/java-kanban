@@ -54,12 +54,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllTasks() {
         deleteItemHistory(tasks.keySet());
+        prioritizedTasks.removeIf(task -> tasks.containsKey(task.getId()));
         tasks.clear();
     }
 
     @Override
     public void deleteAllSubtasks() {
         deleteItemHistory(subtasks.keySet());
+        prioritizedTasks.removeIf(subtask -> subtasks.containsKey(subtask.getId()));
         subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.setSubtasksIds(new ArrayList<>());
@@ -71,6 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics() {
         deleteItemHistory(epics.keySet());
         deleteItemHistory(subtasks.keySet());
+        prioritizedTasks.removeIf(subtask -> subtasks.containsKey(subtask.getId()));
         epics.clear();
         subtasks.clear();
     }
@@ -152,6 +155,11 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime startTimeComp = prioritizedTask.getStartTime();
             LocalDateTime endTimeComp = prioritizedTask.getEndTime();
 
+//            Первое условие проверяет, что голова временного отрезка зацепила существующий временной отрезок
+//            Второе условие проверяет, что хвост временного отрезка зацепил существующий временной отрезок
+//            Третье условие проверяет, что временной отрезок оборачивает существующий временной отрезок
+//            А если мы будем проверять только условие "startTime isAfter startTimeComp && endTime isBefore endTimeComp",
+//            то будем отлавливать только частный случай, когда и голова, и хвост временного отрезка оказались в существующем временном отрезке
             if(startTime != null && startTimeComp != null) {
                 if ((startTime.isAfter(startTimeComp) && startTime.isBefore(endTimeComp)) ||
                         (endTime.isAfter(startTimeComp) && endTime.isBefore(endTimeComp)) ||
@@ -222,6 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subtasks.remove(subtaskId);
                 historyManager.remove(subtaskId);
             }
+            prioritizedTasks.removeIf(subtask -> epic.getSubtasksIds().contains(subtask.getId()));
             epics.remove(id);
             historyManager.remove(id);
         }

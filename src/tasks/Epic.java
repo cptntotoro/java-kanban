@@ -25,7 +25,7 @@ public class Epic extends Task {
 
     public Epic(int id, String name, TaskStatus status, String description, LocalDateTime startTime, long duration, LocalDateTime endTime) {
         super(id, name, status, description, startTime, duration);
-        setEndTime(endTime);
+        this.endTime = endTime;
     }
 
     public List<Integer> getSubtasksIds() {
