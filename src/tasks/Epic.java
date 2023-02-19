@@ -3,29 +3,32 @@ package tasks;
 import tasks.enums.TaskStatus;
 import tasks.enums.TaskType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Epic extends Task {
+public class Epic extends Task implements Serializable {
 
-    private final TaskType type = TaskType.EPIC;
     private List<Integer> subtasksIds = new ArrayList<>();
 
     private LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
+        this.type = TaskType.EPIC;
     }
 
     public Epic(int id, String name, TaskStatus status, String description) {
         super(id, name, status, description);
+        this.type = TaskType.EPIC;
     }
 
     public Epic(int id, String name, TaskStatus status, String description, LocalDateTime startTime, long duration, LocalDateTime endTime) {
         super(id, name, status, description, startTime, duration);
         this.endTime = endTime;
+        this.type = TaskType.EPIC;
     }
 
     public List<Integer> getSubtasksIds() {
@@ -69,11 +72,11 @@ public class Epic extends Task {
         if (!(o instanceof Epic)) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return type == epic.type && Objects.equals(subtasksIds, epic.subtasksIds) && Objects.equals(endTime, epic.endTime);
+        return Objects.equals(subtasksIds, epic.subtasksIds) && Objects.equals(endTime, epic.endTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), type, subtasksIds, endTime);
+        return Objects.hash(super.hashCode(), subtasksIds, endTime);
     }
 }

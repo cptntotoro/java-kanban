@@ -1,5 +1,8 @@
 package manager;
 
+import manager.interfaces.HistoryManager;
+import manager.interfaces.TaskManager;
+import manager.utils.Managers;
 import tasks.Epic;
 import tasks.enums.TaskStatus;
 import tasks.Subtask;
@@ -12,9 +15,9 @@ import java.util.*;
 public class InMemoryTaskManager implements TaskManager {
 
     protected final HistoryManager historyManager = Managers.getHistoryManager();
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
 
     private final Set<Task> prioritizedTasks = new TreeSet<>((Task o1, Task o2) -> {
         if (o1.getStartTime() != null && o2.getStartTime() != null) {
@@ -30,6 +33,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected void setIdCounter(int idCounter) {
         this.idCounter = idCounter;
+    }
+    protected int getIdCounter() {
+        return this.idCounter;
     }
 
     private int generateNewId() {
@@ -169,8 +175,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         tasks.replace(task.getId(), task);
-        prioritizedTasks.removeIf(task1 -> task1.getId() == task.getId());
-        prioritizedTasks.add(task);
+        updatePrioritizedTasks(task);
     }
 
     @Override
@@ -181,8 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (subtasks.replace(subtask.getId(), subtask) != null) {
             updateEpicState(subtask.getEpicId());
-            prioritizedTasks.removeIf(subtask1 -> subtask1.getId() == subtask.getId());
-            prioritizedTasks.add(subtask);
+            updatePrioritizedTasks(subtask);
         }
     }
 
@@ -281,8 +285,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
+    }
+
+    void updatePrioritizedTasks(Task task) {
+        prioritizedTasks.removeIf(task1 -> task1.getId() == task.getId());
+        prioritizedTasks.add(task);
     }
 }
 

@@ -1,4 +1,4 @@
-package manager;
+package manager.interfaces;
 
 import tasks.Epic;
 import tasks.Subtask;
@@ -46,4 +46,6 @@ public interface TaskManager {
     List<Subtask> getSubtasksOfEpic(int id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }

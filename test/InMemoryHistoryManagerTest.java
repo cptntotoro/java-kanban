@@ -1,4 +1,4 @@
-import manager.HistoryManager;
+import manager.interfaces.HistoryManager;
 
 import manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,5 +1,9 @@
 package manager;
 
+import manager.exceptions.ManagerReadException;
+import manager.exceptions.ManagerSaveException;
+import manager.interfaces.SaveLoadManager;
+import manager.utils.CSVTaskFormat;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -11,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager implements SaveLoadManager {
 
     private final File file;
 
@@ -19,17 +23,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
+    @Override
+    public void load() {
+        fillTaskManagerFromFile(this);
+    }
+
     public static FileBackedTaskManager loadFromFile(File file) {
         final FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
+        fillTaskManagerFromFile(taskManager);
+        return taskManager;
+    }
+
+    private static void fillTaskManagerFromFile(FileBackedTaskManager taskManager) {
+
         List<String> fileContent;
         try {
-            fileContent = Files.readAllLines(Path.of(file.getPath()));
+            fileContent = Files.readAllLines(Path.of(taskManager.file.getPath()));
         } catch (IOException e) {
             throw new ManagerReadException("File reading error.", e);
         }
 
         if(fileContent.size() < 3) {
-            return taskManager;
+            return;
         }
 
         Map<Integer, Task> allTypesOfTasks = new HashMap<>();
@@ -62,9 +77,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         for (Integer taskId : taskIdsFromHistory) {
             taskManager.historyManager.addTask(allTypesOfTasks.get(taskId));
         }
-        return taskManager;
     }
 
+    @Override
     public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic\n");

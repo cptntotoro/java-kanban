@@ -3,14 +3,15 @@ package tasks;
 import tasks.enums.TaskStatus;
 import tasks.enums.TaskType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
-    private final TaskType type = TaskType.TASK;
+public class Task implements Serializable {
+    protected TaskType type;
     private String name;
     private String description;
-    private int id;
+    private Integer id;
     private TaskStatus status = TaskStatus.NEW;
 
     private LocalDateTime startTime;
@@ -19,6 +20,7 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.type = TaskType.TASK;
     }
 
     public Task(String name, String description, LocalDateTime startTime, long duration) {
@@ -26,6 +28,7 @@ public class Task {
         this.description = description;
         this.startTime = startTime;
         this.duration = duration;
+        this.type = TaskType.TASK;
     }
 
     public Task(int id, String name, TaskStatus status, String description) {
@@ -33,14 +36,15 @@ public class Task {
         this.name = name;
         this.status = status;
         this.description = description;
+        this.type = TaskType.TASK;
     }
 
      public Task(int id, String name, TaskStatus status, String description, LocalDateTime startTime, long duration) {
          this(id, name, status, description);
          this.startTime = startTime;
          this.duration = duration;
+         this.type = TaskType.TASK;
      }
-
 
     public String getName() {
         return name;
@@ -58,11 +62,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -108,12 +112,12 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && duration == task.duration && type == task.type && Objects.equals(name, task.name) &&
+        return id == task.id && duration == task.duration && Objects.equals(name, task.name) &&
                 Objects.equals(description, task.description) && status == task.status && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, name, description, id, status, startTime, duration);
+        return Objects.hash(name, description, id, status, startTime, duration);
     }
 }

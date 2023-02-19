@@ -1,4 +1,4 @@
-import manager.TaskManager;
+import manager.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
