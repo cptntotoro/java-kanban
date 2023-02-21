@@ -1,4 +1,5 @@
-import manager.*;
+package manager;
+
 import manager.exceptions.ManagerReadException;
 import manager.interfaces.TaskManager;
 import org.junit.jupiter.api.AfterEach;
@@ -112,7 +113,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     }
 
 
-
+//    тесты на эпики были реализованы в рамках проверки менедженров,
+//    т.к. сами эпики ничего специфического из себя не представляют,
+//    весь отличающийся функционал, вроде расчета времени исполнения или статуса, реализован в менеджерах
+//    какие именно "тесты на эпик" вы имеете в виду?
     @Test
     public void loadFromFileEmptyEpic() {
         epic2 = taskManager.getEpicById(taskManager.createEpic(new Epic("Empty Epic", "Empty epic description")));

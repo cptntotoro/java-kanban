@@ -1,3 +1,5 @@
+package manager;
+
 import manager.interfaces.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -233,6 +235,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals("Updated subtask description", currentSubtaskDescription, "Subtask description must be updated.");
     }
 
+//    тесты на эпики были реализованы в рамках проверки менедженров,
+//    т.к. сами эпики ничего специфического из себя не представляют,
+//    весь отличающийся функционал, вроде расчета времени исполнения или статуса, реализован в менеджерах
+//    какие именно "тесты на эпик" вы имеете в виду?
     @Test
     void updateEpic() {
         initializeTasks();
@@ -335,6 +341,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.updateSubtask(subtask);
     }
 
+//    тесты на эпики были реализованы в рамках проверки менедженров,
+//    т.к. сами эпики ничего специфического из себя не представляют,
+//    весь отличающийся функционал, вроде расчета времени исполнения или статуса, реализован в менеджерах
+//    какие именно "тесты на эпик" вы имеете в виду?
     @Test
     void updateEpicStatus() {
         initializeTasks();
@@ -378,6 +388,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(task.getEndTime(), LocalDateTime.of(1999, 1, 1, 1, 31));
     }
 
+//    тесты на эпики были реализованы в рамках проверки менедженров,
+//    т.к. сами эпики ничего специфического из себя не представляют,
+//    весь отличающийся функционал, вроде расчета времени исполнения или статуса, реализован в менеджерах
+//    какие именно "тесты на эпик" вы имеете в виду?
     @Test
     void timeEpic() {
         Integer epic1Id = taskManager.createEpic(new Epic("Not Empty Epic", "Not empty epic description1"));

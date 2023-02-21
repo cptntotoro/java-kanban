@@ -61,15 +61,16 @@ public class HttpTaskServer {
     }
 
     public void start() {
-        System.out.println("Запускаем сервер на порту " + PORT);
-        System.out.println("Открой в браузере http://localhost:" + PORT + "/");
+        System.out.printf("Запускаем сервер на порту %s%n", PORT);
+        System.out.printf("Запускаем сервер на порту %s%n", PORT);
+        System.out.printf("Открой в браузере http://localhost:%s/ %n", PORT);
         httpServer.start();
-        System.out.println("HTTP-сервер запущен на порту " + PORT);
+        System.out.printf("HTTP-сервер запущен на порту %s%n", PORT);
 
     }
 
     public void stop() {
-        System.out.println("Выключаем сервер на порту " + PORT);
+        System.out.printf("Выключаем сервер на порту %s%n", PORT);
         httpServer.stop(0);
     }
     class TaskManagerHandler implements HttpHandler {
@@ -82,7 +83,7 @@ public class HttpTaskServer {
                     case "":
                     case "/":
                         if (!httpExchange.getRequestMethod().equals("GET")) {
-                            System.out.println("/ Ждёт GET-запрос, а получил " + httpExchange.getRequestMethod());
+                            System.out.printf("/ Ждёт GET-запрос, а получил %s%n", httpExchange.getRequestMethod());
                             httpExchange.sendResponseHeaders(405, 0);
                         }
                         response = gson.toJson(taskManager.getPrioritizedTasks());
@@ -99,7 +100,7 @@ public class HttpTaskServer {
                         break;
                     case "/subtask/epic":
                         if (!httpExchange.getRequestMethod().equals("GET")) {
-                            System.out.println("/subtask/epic Ждёт GET-запрос, а получил " + httpExchange.getRequestMethod());
+                            System.out.printf("/subtask/epic Ждёт GET-запрос, а получил %s%n", httpExchange.getRequestMethod());
                             httpExchange.sendResponseHeaders(405, 0);
                         }
                         String rawQuery = httpExchange.getRequestURI().getRawQuery();
@@ -113,7 +114,7 @@ public class HttpTaskServer {
                         break;
                     case "/history":
                         if (!httpExchange.getRequestMethod().equals("GET")) {
-                            System.out.println("/ Ждёт GET-запрос, а получил " + httpExchange.getRequestMethod());
+                            System.out.printf("/ Ждёт GET-запрос, а получил %s%n", httpExchange.getRequestMethod());
                             httpExchange.sendResponseHeaders(405, 0);
                         }
                         response = gson.toJson(taskManager.getHistory());
@@ -122,7 +123,7 @@ public class HttpTaskServer {
 
 
                     default:
-                        System.out.println("Неизвестный запрос: " + httpExchange.getRequestURI());
+                        System.out.printf("Неизвестный запрос: %s%n", httpExchange.getRequestURI());
                         httpExchange.sendResponseHeaders(404, 0);
 
                 }

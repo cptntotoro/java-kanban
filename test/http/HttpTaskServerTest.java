@@ -1,3 +1,5 @@
+package http;
+
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import http.servers.HttpTaskServer;
@@ -307,6 +309,10 @@ public class HttpTaskServerTest {
         assertEquals(3, tasks.size(), "Кол-во тасок отличается");
     }
 
+//    тесты на эпики были реализованы в рамках проверки менедженров,
+//    т.к. сами эпики ничего специфического из себя не представляют,
+//    весь отличающийся функционал, вроде расчета времени исполнения или статуса, реализован в менеджерах
+//    какие именно "тесты на эпик" вы имеете в виду?
     @Test
     public void endpointTasksEpicPost() {
 

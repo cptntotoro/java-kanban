@@ -1,5 +1,6 @@
+package manager;
+
 import http.servers.KVServer;
-import manager.HttpTaskManager;
 import manager.exceptions.ManagerSaveException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,9 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager>{
