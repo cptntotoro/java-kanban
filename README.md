@@ -1,4 +1,4 @@
-# java-kanban - Kanban-приложение для упраления задачами
+# java-kanban - Kanban-приложение для управления задачами
 Java, Gson, JUnit, API
 
 ## О проекте
